@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="hello">慧牧开放平台Sdk演示程序</string>
-    <string name="app_name">数字牧场</string>
+    <string name="app_name">湖羊屠宰</string>
     <string name="up">绑定sdk</string>
     <string name="down">解绑sdk</string>
     <string name="no_clientid">(none)</string>

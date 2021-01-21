@@ -3,7 +3,6 @@ package com.huimv.szmc.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import junit.framework.Assert;
 
 /**
  * @author Lostrue
@@ -18,7 +17,6 @@ public class MD5Util {
 	 * @return String 返回的密文40位
 	 */
 	public static String crypt(String str) {
-		Assert.assertNotNull(str);
 		StringBuffer hexString = new StringBuffer();
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");

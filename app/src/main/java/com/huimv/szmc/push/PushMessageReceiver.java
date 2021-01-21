@@ -109,7 +109,7 @@ public class PushMessageReceiver extends BroadcastReceiver {
 /*		Notification notification = new Notification.Builder(HaifmPApplication.getInstance())
 				.setContentTitle("你有新消息")
 				.setContentText(tickerText)
-				.setSmallIcon(R.drawable.haifm_icon)
+				.setSmallIcon(R.drawable.haifm_icon.png)
 				.setContentIntent(contentIntent)
 				.build();
 		notification.flags = Notification.FLAG_AUTO_CANCEL;

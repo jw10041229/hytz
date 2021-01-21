@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'bugly'
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     aaptOptions.cruncherEnabled =false
     aaptOptions.useNewCruncher =false
     signingConfigs {
@@ -17,11 +17,11 @@ android {
         }
     }
     defaultConfig {
-        applicationId "com.huimv.szmc"
-        minSdkVersion 18
-        targetSdkVersion 22
-        versionCode 3
-        versionName "V1.0.0.3"
+        applicationId "com.huimv.hytz"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "V1.0.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [
                 GETUI_APP_ID : "WeAMRkV2md9kTcWM9qip83",
@@ -48,7 +48,7 @@ android {
         variant.outputs.all {
             def vName = defaultConfig.versionName
             def buildType = variant.buildType.name
-            outputFileName = "szmc_${vName}_${buildType}_${releaseTime()}.apk"
+            outputFileName = "hytz_${vName}_${buildType}_${releaseTime()}.apk"
         }
 
     }
@@ -88,7 +88,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:25.2.1'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'pub.devrel:easypermissions:0.3.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.orhanobut:logger:1.3'

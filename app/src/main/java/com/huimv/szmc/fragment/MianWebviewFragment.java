@@ -44,8 +44,8 @@ public class MianWebviewFragment extends BaseFragment{
         mProgressBar.setMax(100);
         mSpUtil = HaifmPApplication.getInstance().getSpUtil();
         String type = XtAppConstant.type2;
-        String accoutParma = "/login.htm?type=" + type + "&sbid=" + mSpUtil.getUniqueID();
-        initWebView(url + accoutParma);
+        String accoutParma = "/login.htm";
+        initWebView("http://122.112.212.35/hyAppbutcher/#/");
         return view;
     }
 
