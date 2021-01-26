@@ -51,8 +51,8 @@ public class MianWebviewFragment extends BaseFragment{
         mSpUtil = HaifmPApplication.getInstance().getSpUtil();
         String type = XtAppConstant.type2;
         String accoutParma = "/login.htm";
-        //initWebView("http://122.112.212.35/hyAppbutcher/#/");
-        initWebView("http://hzsheep.ifarmcloud.com/hyAppbutcher/#/addSheep?item=");
+        initWebView("http://122.112.212.35/hyAppbutcher/#/");
+        //initWebView("http://hzsheep.ifarmcloud.com/hyAppbutcher/#/addSheep?item=");
 
         return view;
     }
@@ -110,12 +110,6 @@ public class MianWebviewFragment extends BaseFragment{
         mainWebView.loadUrl(isAPPStrUrl);
         //mainWebView.loadUrl("http://www.ifarmcloud.com/ifm/login.htm?type=4");
         getDataFromWeb();
-       /* new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                jumpToScan();
-            }
-        },2000);*/
     }
     private void getDataFromWeb() {
         mainWebView.registerHandler("scanQrCode", new BridgeHandler() {
