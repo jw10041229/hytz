@@ -1,1 +1,1 @@
-include ':app', ':slidelibrary', ':base-library'
+include ':app', ':slidelibrary', ':base-library',':qrcodecore',':zbar'

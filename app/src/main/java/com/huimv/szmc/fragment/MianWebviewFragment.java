@@ -1,7 +1,9 @@
 package com.huimv.szmc.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +16,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
+import com.github.lzyzsd.jsbridge.BridgeHandler;
 import com.github.lzyzsd.jsbridge.BridgeWebView;
 import com.github.lzyzsd.jsbridge.BridgeWebViewClient;
 import com.github.lzyzsd.jsbridge.CallBackFunction;
 import com.huimv.android.basic.base.BaseFragment;
 import com.huimv.szmc.R;
+import com.huimv.szmc.activity.TestScanActivity;
 import com.huimv.szmc.app.HaifmPApplication;
 import com.huimv.szmc.constant.XtAppConstant;
 import com.huimv.szmc.messageEvent.MessageEvent;
@@ -28,6 +32,8 @@ import com.orhanobut.logger.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import static android.app.Activity.RESULT_OK;
 
 public class MianWebviewFragment extends BaseFragment{
     private final static String TAG = "MianWebviewFragment";
@@ -45,7 +51,9 @@ public class MianWebviewFragment extends BaseFragment{
         mSpUtil = HaifmPApplication.getInstance().getSpUtil();
         String type = XtAppConstant.type2;
         String accoutParma = "/login.htm";
-        initWebView("http://122.112.212.35/hyAppbutcher/#/");
+        //initWebView("http://122.112.212.35/hyAppbutcher/#/");
+        initWebView("http://hzsheep.ifarmcloud.com/hyAppbutcher/#/addSheep?item=");
+
         return view;
     }
 
@@ -69,7 +77,19 @@ public class MianWebviewFragment extends BaseFragment{
         settings.setUseWideViewPort(true);
         settings.setLayoutAlgorithm(LayoutAlgorithm.SINGLE_COLUMN);
         settings.setLoadWithOverviewMode(true);
-
+        settings.setUseWideViewPort(true);
+        settings.setDomStorageEnabled(true);
+        settings.setDefaultTextEncodingName("UTF-8");
+        settings.setAllowContentAccess(true); // 是否可访问Content Provider的资源，默认值 true
+        settings.setAllowFileAccess(true);    // 是否可访问本地文件，默认值 true
+        // 是否允许通过file url加载的Javascript读取本地文件，默认值 false
+        settings.setAllowFileAccessFromFileURLs(false);
+        // 是否允许通过file url加载的Javascript读取全部资源(包括文件,http,https)，默认值 false
+        settings.setAllowUniversalAccessFromFileURLs(false);
+        //开启JavaScript支持
+        settings.setJavaScriptEnabled(true);
+        // 支持缩放
+        settings.setSupportZoom(true);
 
         // mainWebView.setWebViewClient(new MyWebViewClient(mainWebView));
         //设置Web视图
@@ -89,9 +109,31 @@ public class MianWebviewFragment extends BaseFragment{
         //mainWebView.setWebViewClient(new mWebViewClient ());
         mainWebView.loadUrl(isAPPStrUrl);
         //mainWebView.loadUrl("http://www.ifarmcloud.com/ifm/login.htm?type=4");
-
+        getDataFromWeb();
+       /* new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                jumpToScan();
+            }
+        },2000);*/
+    }
+    private void getDataFromWeb() {
+        mainWebView.registerHandler("scanQrCode", new BridgeHandler() {
+            @Override
+            public void handler(String data, CallBackFunction function) {
+                Log.e("TAG", "js返回：" + data);
+                //Android返回给JS的消息
+                function.onCallBack("我是js调用Android返回数据：" + data);
+                jumpToScan();
+            }
+        });
     }
 
+
+    private void jumpToScan() {
+        //startActivity(new Intent(getActivity(), TestScanActivity.class));
+        startActivityForResult(new Intent(getActivity(), TestScanActivity.class), 0x99);
+    }
     /**
      * 自定义的WebViewClient
      */
@@ -111,7 +153,15 @@ public class MianWebviewFragment extends BaseFragment{
             }
         });
     }
-
+    private void sendDataQrCodeToWeb(String qrcode) {
+        Log.d("sendDataToWeb", "sendDataToWeb: " + qrcode);
+        mainWebView.callHandler("scanResult", qrcode, new CallBackFunction() {
+            @Override
+            public void onCallBack(String data) {
+                Logger.d("Recdata", "收到数据");
+            }
+        });
+    }
     //Web视图
     private class mWebViewClient extends WebViewClient {
         @Override
@@ -132,6 +182,8 @@ public class MianWebviewFragment extends BaseFragment{
         EventBus.getDefault().unregister(this);
     }
 
+
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(String event) {
         sendDataToWeb(event);
@@ -146,5 +198,24 @@ public class MianWebviewFragment extends BaseFragment{
         if (event.getId() == 2) {
             initWebView(url + "/logout.htm?sbid=" +  mSpUtil.getUniqueID());
         }
+
+        if (event.getId() == 3) {
+            Log.d(TAG, "onMessageEvent: " + event.getData());
+
+        }
     };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) { //resultCode为回传的标记，我在B中回传的是RESULT_OK
+            case RESULT_OK:
+                Bundle b= data.getExtras(); //data为B中回传的Intent
+                String str= b.getString("result");//str即为回传的值
+                sendDataQrCodeToWeb(str);
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -114,5 +114,9 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
+    <color name="colorPrimaryDark">#f57257</color>
+    <color name="colorPrimary">#f46444</color>
+    <color name="navigationBarColor">#f46444</color>
 
+    <color name="colorPrimaryDarkTrans">#CCf57257</color>
 </resources>

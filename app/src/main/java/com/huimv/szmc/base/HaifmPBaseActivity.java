@@ -41,7 +41,7 @@ public class HaifmPBaseActivity extends SlidingFragmentActivity {
         }
 
         if (mReader != null) {
-            new InitTask().execute();
+            //new InitTask().execute();
         }
     }
 

@@ -73,7 +73,7 @@ public class HaifmPApplication extends Application {
 		ImageLoader.getInstance().init(config);
 		
 		mSpUtil = new SharePreferenceUtil(this, SP_FILE_NAME);
-		mSpUtil.setUniqueID(getUniqueID());// 得到手机唯一标识符
+		//mSpUtil.setUniqueID(getUniqueID());// 得到手机唯一标识符
 		
 		instance = this;
 		

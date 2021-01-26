@@ -1,5 +1,7 @@
 package com.huimv.szmc.activity;
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,14 +24,18 @@ import com.huimv.szmc.messageEvent.MessageEvent;
 import com.huimv.szmc.util.SharePreferenceUtil;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class MainActivity extends HaifmPBaseActivity implements OnClickListener {
+
+public class MainActivity extends HaifmPBaseActivity implements OnClickListener, EasyPermissions.PermissionCallbacks {
     private ImageView account_icon;
     private ImageView message_icon;
     private ViewPager mViewPager;
@@ -37,7 +43,7 @@ public class MainActivity extends HaifmPBaseActivity implements OnClickListener 
     private List<Fragment> mFragments = new ArrayList<Fragment>();
     private SharePreferenceUtil mSpUitl;
     String param;
-
+    private static final int REQUEST_CODE_QRCODE_PERMISSIONS = 1;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +58,32 @@ public class MainActivity extends HaifmPBaseActivity implements OnClickListener 
         initUHF();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        requestCodeQRCodePermissions();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+    }
+
+    @AfterPermissionGranted(REQUEST_CODE_QRCODE_PERMISSIONS)
+    private void requestCodeQRCodePermissions() {
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+        if (!EasyPermissions.hasPermissions(this, perms)) {
+            EasyPermissions.requestPermissions(this, "扫描二维码需要打开相机和散光灯的权限", REQUEST_CODE_QRCODE_PERMISSIONS, perms);
+        }
+    }
     private void initViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
         mFragments.clear();
@@ -188,4 +220,6 @@ public class MainActivity extends HaifmPBaseActivity implements OnClickListener 
             }
         }
     };
+
+
 }
